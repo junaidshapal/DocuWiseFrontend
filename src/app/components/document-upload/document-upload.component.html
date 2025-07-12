@@ -1,0 +1,18 @@
+<div class="max-w-xl mx-auto mt-8 p-6 bg-white shadow rounded">
+  <h2 class="text-2xl font-bold mb-4">Upload Document</h2>
+
+  <input type="file" (change)="onFileSelected($event)" class="mb-4 w-full border p-2 rounded" />
+
+  <input
+    type="text"
+    [(ngModel)]="title"
+    placeholder="Enter document title"
+    class="mb-4 w-full border p-2 rounded"
+  />
+
+  <button (click)="onUpload()" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 w-full">
+    Upload
+  </button>
+
+  <p class="mt-4 text-sm text-red-600" *ngIf="uploadStatus">{{ uploadStatus }}</p>
+</div>
