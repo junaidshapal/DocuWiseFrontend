@@ -1,1 +1,49 @@
-<p>document-detail works!</p>
+<div *ngIf="document" #pdfContent class="p-6 max-w-4xl mx-auto bg-white shadow-lg rounded-xl space-y-6">
+  <!-- Document Title and Category -->
+  <div class="border-b pb-4">
+    <h2 class="text-3xl font-bold text-gray-800">{{ document.title }}</h2>
+    <p class="text-sm text-gray-500 mt-1">Category: {{ document.category }}</p>
+  </div>
+
+  <!-- Favorite Toggle -->
+  <button (click)="toggleFavorite()"
+          class="text-yellow-500 hover:text-yellow-600 font-medium flex items-center gap-2 transition duration-200">
+    <svg class="w-5 h-5 fill-current" [ngClass]="{ 'text-yellow-400': isFavorited, 'text-gray-300': !isFavorited }" viewBox="0 0 24 24">
+      <path d="M12 .587l3.668 7.431 8.2 1.193-5.934 5.78 1.4 8.165L12 18.897l-7.334 3.86 1.4-8.165L.132 9.211l8.2-1.193z"/>
+    </svg>
+    {{ isFavorited ? 'Remove from Favorites' : 'Add to Favorites' }}
+  </button>
+
+  <!-- Summary -->
+  <div>
+    <strong class="block mb-1 text-gray-700">Summary:</strong>
+    <p [innerHTML]="getHighlightedSummary()" class="text-gray-800 leading-relaxed"></p>
+  </div>
+
+  <!-- Keywords -->
+  <div>
+    <strong class="block mb-2 text-gray-700">Keywords:</strong>
+    <ng-container *ngFor="let kw of document.keywords.split(','); let i = index">
+      <span class="cursor-pointer px-2 py-1 rounded text-sm inline-block mr-2 mt-2 shadow-sm transition"
+            [ngClass]="getKeywordColor(i)"
+            (click)="keywordClicked(kw.trim())">
+        {{ kw.trim() }}
+      </span>
+    </ng-container>
+  </div>
+
+  <!-- Download Button -->
+  <div class="flex justify-end mt-4 max-w-4xl mx-auto">
+  <button
+    (click)="downloadPDF()"
+    class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded flex items-center gap-2 transition"
+  >
+    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5 5-5M12 15V3"/>
+    </svg>
+    Download
+  </button>
+</div>
+
+
+
