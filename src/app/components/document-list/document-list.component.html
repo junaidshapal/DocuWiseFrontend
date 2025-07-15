@@ -1,11 +1,39 @@
-<div class="max-w-4xl mx-auto mt-10 p-4">
-  <h2 class="text-2xl font-bold mb-4 text-center">My Documents</h2>
-  <div *ngIf="documents.length === 0" class="text-center text-gray-500">No documents found.</div>
-  <div *ngFor="let doc of documents" class="bg-white shadow rounded-lg p-4 mb-4">
-    <h3 class="font-semibold text-lg">{{ doc.title }}</h3>
-    <p class="text-sm text-gray-600">Summary: {{ doc.summary }}</p>
-    <p class="text-sm text-gray-600">Keywords: {{ doc.keywords }}</p>
-    <p class="text-sm text-gray-600">Category: {{ doc.category }}</p>
-    <button (click)="deleteDocument(doc.id)" class="mt-2 bg-red-500 hover:bg-red-600 text-white px-4 py-1 rounded">Delete</button>
+<div class="flex justify-between items-center mb-6 px-4">
+  <h2 class="text-2xl font-bold">My Documents</h2>
+
+  <input
+    [(ngModel)]="searchTerm"
+    (input)="onSearchChange()"
+    type="text"
+    placeholder="Search by title..."
+    class="border border-gray-300 rounded px-4 py-2 w-64"
+  />
+</div>
+
+<div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+  <div *ngFor="let doc of filteredDocuments" class="bg-white shadow rounded-lg p-4 flex flex-col justify-between">
+    <div>
+      <h4 class="text-lg font-semibold">{{ doc.title }}</h4>
+      <p class="text-sm text-gray-500">Category: {{ doc.category }}</p>
+    </div>
+
+    <div class="flex items-center justify-end mt-4 space-x-3">
+      <!-- View Detail -->
+      <button (click)="openDetail(doc.id)" class="text-blue-600 hover:text-blue-800" title="View">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2"
+             viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+          <path d="M2.458 12C3.732 7.943 7.523 5 12 5s8.268 2.943 9.542 7c-1.274 4.057-5.065 7-9.542 7s-8.268-2.943-9.542-7z"/>
+        </svg>
+      </button>
+
+      <!-- Delete -->
+      <button (click)="deleteDocument(doc.id)" class="text-red-600 hover:text-red-800" title="Delete">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2"
+             viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+      </button>
+    </div>
   </div>
 </div>
