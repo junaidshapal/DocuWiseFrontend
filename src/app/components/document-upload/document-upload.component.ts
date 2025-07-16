@@ -1,16 +1,24 @@
 import { Component } from '@angular/core';
 import { DocumentService } from '../../Services/document.service';
+import { ToastrService } from 'ngx-toastr';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-document-upload',
   templateUrl: './document-upload.component.html'
 })
 export class DocumentUploadComponent {
-  selectedFile: File | null = null;
+  selectedFile: File | undefined = undefined;
   title: string = '';
-  uploadStatus: string = '';
+  paragraphText: string = '';
+  mode: 'file' | 'text' = 'file';
+  loading = false;
 
-  constructor(private documentService: DocumentService) {}
+  constructor(
+    private documentService: DocumentService,
+    private toastr: ToastrService,
+    private router: Router
+  ) {}
 
   onFileSelected(event: Event) {
     const target = event.target as HTMLInputElement;
@@ -21,21 +29,37 @@ export class DocumentUploadComponent {
   }
 
   onUpload() {
-    if (!this.selectedFile || !this.title.trim()) {
-      this.uploadStatus = 'Please select a file to upload and title.';
+
+    console.log('Paragraph Text:', this.paragraphText);
+    if (!this.title.trim()) {
+      this.toastr.error('Title is required!');
+      console.log('Error: Title is empty');
       return;
     }
 
-    console.log('Uploading file:', this.selectedFile.name, 'with title:',this.title);
+    if (this.mode === 'file' && !this.selectedFile) {
+      this.toastr.error('Please select a file.');
+      return;
+    }
 
-    this.documentService.uploadDocument(this.selectedFile, this.title).subscribe({
+    if (this.mode === 'text' && !this.paragraphText.trim()) {
+      this.toastr.error('Please enter some text.');
+      return;
+    }
+
+    this.loading = true;
+
+    this.documentService.uploadDocument(this.title, this.selectedFile, this.paragraphText).subscribe({
       next: (res) => {
-        console.log('Upload success response:', res);
-        this.uploadStatus = 'Upload Successful!';
+        this.toastr.success('Document uploaded successfully!');
+        setTimeout(() => {
+          this.loading = false;
+          this.router.navigate(['/documents']);
+        }, 1000);
       },
       error: (err) => {
-        console.error('Upload failed:', err);
-        this.uploadStatus = 'Upload Failed. Please try again: ' + (err?.error?.message || err.message || 'Unknown error');
+        this.loading = false;
+        this.toastr.error('Upload failed: ' + (err?.error?.message || 'Unknown error'));
       }
     });
   }
