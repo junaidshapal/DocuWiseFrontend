@@ -7,20 +7,38 @@ import { AppComponent } from './app.component';
 import { DocumentListComponent } from './components/document-list/document-list.component';
 import { DocumentUploadComponent } from './components/document-upload/document-upload.component';
 import { DocumentDetailComponent } from './components/document-detail/document-detail.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { TopbarComponent } from './components/topbar/topbar.component';
+import { SidebarComponent } from './components/sidebar/sidebar.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ToastrModule } from 'ngx-toastr';
+import { FavoriteDocumentsComponent } from './components/favorite-documents/favorite-documents.component';
+import { ManageProfileComponent } from './components/manage-profile/manage-profile.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     DocumentListComponent,
     DocumentUploadComponent,
-    DocumentDetailComponent
+    DocumentDetailComponent,
+    TopbarComponent,
+    SidebarComponent,
+    FavoriteDocumentsComponent,
+    ManageProfileComponent
   ],
   imports: [
     BrowserModule,
+    ReactiveFormsModule,
     AppRoutingModule,
     HttpClientModule,
-    FormsModule
+    FormsModule,
+    BrowserAnimationsModule,
+    ToastrModule.forRoot({
+      positionClass: 'toast-top-center',
+      timeOut: 3000,
+      closeButton: true,
+      progressBar: true,
+    }),
   ],
   providers: [
     provideClientHydration(),
