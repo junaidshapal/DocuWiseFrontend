@@ -19,10 +19,7 @@ export class SidebarComponent {
     this.isSidebarOpen = false;
   }
 
-  navigate(path: string) {
-    this.router.navigate([path]);
-    this.closeSidebar();
-  }
+  
 
   isAuthRoute(): boolean {
     const path = this.router.url;
