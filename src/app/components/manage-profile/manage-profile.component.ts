@@ -55,8 +55,6 @@ export class ManageProfileComponent implements OnInit {
     }
   });
 }
-
-
   onProfileUpdate() {
     if (this.profileForm.valid) {
       this.userService.updateProfile(this.profileForm.value).subscribe(() => {
