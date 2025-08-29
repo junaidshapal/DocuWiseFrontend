@@ -11,13 +11,7 @@ export class SidebarComponent {
 
   constructor(private router: Router) {}
 
-  toggleSidebar() {
-    this.isSidebarOpen = !this.isSidebarOpen;
-  }
-
-  closeSidebar() {
-    this.isSidebarOpen = false;
-  }
+  
 
   navigate(path: string) {
     this.router.navigate([path]);
