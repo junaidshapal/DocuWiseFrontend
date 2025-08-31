@@ -7,11 +7,13 @@ import { FavoriteDocumentsComponent } from './components/favorite-documents/favo
 import { DocumentDetailComponent } from './components/document-detail/document-detail.component';
 import { ManageProfileComponent } from './components/manage-profile/manage-profile.component';
 
+//Routes for components and are protected
 const routes: Routes = [
   { path: '', redirectTo: 'documents', pathMatch: 'full' },
   { path: 'documents', component: DocumentListComponent, canActivate: [AuthGuard] },
   { path: 'upload', component: DocumentUploadComponent, canActivate: [AuthGuard] },
   {
+    //child route for AuthModule
     path: '',
     loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule)
   },
