@@ -9,7 +9,9 @@ export class UserService {
 private baseUrl = 'https://localhost:7187/api/UserProfile';
   constructor(private http: HttpClient) { }
 
-  
+  getProfile() {
+  return this.http.get<UserProfile>(`${this.baseUrl}`);
+}
 
 updateProfile(data: any) {
   return this.http.put(`${this.baseUrl}/update`, data);
