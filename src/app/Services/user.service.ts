@@ -9,6 +9,7 @@ export class UserService {
 private baseUrl = 'https://localhost:7187/api/UserProfile';
   constructor(private http: HttpClient) { }
 
+  //hitting the endpoints for User Controller
   getProfile() {
   return this.http.get<UserProfile>(`${this.baseUrl}`);
 }
