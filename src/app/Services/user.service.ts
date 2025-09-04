@@ -10,7 +10,7 @@ private baseUrl = 'https://localhost:7187/api/UserProfile';
   constructor(private http: HttpClient) { }
 
   //hitting the endpoints for User Controller
-  getProfile() {
+getProfile() {
   return this.http.get<UserProfile>(`${this.baseUrl}`);
 }
 
@@ -21,8 +21,6 @@ updateProfile(data: any) {
 changePassword(data: any) {
   return this.http.put(`${this.baseUrl}/change-password`, data, { responseType: 'text' });
 }
-
-
 
 uploadProfilePicture(formData: FormData) {
   return this.http.post(`${this.baseUrl}/upload-picture`, formData);
