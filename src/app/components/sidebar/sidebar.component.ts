@@ -11,15 +11,13 @@ export class SidebarComponent {
 
   constructor(private router: Router) {}
 
-  
+  toggleSidebar() {
+    this.isSidebarOpen = !this.isSidebarOpen;
+  }
 
   navigate(path: string) {
     this.router.navigate([path]);
     this.closeSidebar();
-  }
-
-  toggleSidebar() {
-    this.isSidebarOpen = !this.isSidebarOpen;
   }
 
   closeSidebar() {
