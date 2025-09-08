@@ -1,7 +1,19 @@
-<app-topbar></app-topbar>
-<div class="flex">
-  <app-sidebar></app-sidebar>
-  <div class="flex-1 min-h-screen bg-gray-50 p-6">
-    <router-outlet></router-outlet>
+<div class="flex h-screen overflow-hidden">
+  <!-- Sidebar only on non-auth pages -->
+  <app-sidebar *ngIf="!isAuthRoute"
+               [isCollapsed]="isSidebarCollapsed"
+               (toggleCollapse)="onToggleSidebar()"></app-sidebar>
+
+  <div class="flex-1 flex flex-col"
+       [ngClass]="!isAuthRoute ? (isSidebarCollapsed ? 'lg:ml-16' : 'lg:ml-64') : ''">
+    <app-topbar *ngIf="!isAuthRoute"
+                [isCollapsed]="isSidebarCollapsed"
+                (toggleCollapse)="onToggleSidebar()"></app-topbar>
+
+    <main class="flex-1 bg-gray-50 overflow-auto">
+      <div class="p-6">
+        <router-outlet></router-outlet>
+      </div>
+    </main>
   </div>
 </div>
