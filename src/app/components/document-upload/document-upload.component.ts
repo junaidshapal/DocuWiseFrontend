@@ -13,6 +13,7 @@ export class DocumentUploadComponent {
   paragraphText: string = '';
   mode: 'file' | 'text' = 'file';
   loading = false;
+  uploadStatus: string = '';
 
   constructor(
     private documentService: DocumentService,
@@ -51,7 +52,9 @@ export class DocumentUploadComponent {
 
     this.documentService.uploadDocument(this.title, this.selectedFile, this.paragraphText).subscribe({
       next: (res) => {
+        this.uploadStatus = 'Document uploaded successfully!';
         this.toastr.success('Document uploaded successfully!');
+        this.toastr.success('Summary generated successfully!', 'AI Processing Complete');
         setTimeout(() => {
           this.loading = false;
           this.router.navigate(['/documents']);
@@ -59,6 +62,7 @@ export class DocumentUploadComponent {
       },
       error: (err) => {
         this.loading = false;
+        this.uploadStatus = 'Upload failed: ' + (err?.error?.message || 'Unknown error');
         this.toastr.error('Upload failed: ' + (err?.error?.message || 'Unknown error'));
       }
     });

@@ -2,6 +2,7 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { DocumentService } from '../../Services/document.service';
 import { FavoriteService } from '../../Services/favorite.service';
+import { ToastrService } from 'ngx-toastr';
 import html2pdf from 'html2pdf.js';
 
 @Component({
@@ -19,7 +20,8 @@ export class DocumentDetailComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private documentService: DocumentService,
-    private favoriteService: FavoriteService
+    private favoriteService: FavoriteService,
+    private toastr: ToastrService
   ) {}
 
   ngOnInit(): void {
@@ -43,12 +45,26 @@ export class DocumentDetailComponent implements OnInit {
   if (!this.document) return;
 
   if (this.isFavorited) {
-    this.favoriteService.removeFavorite(this.document.id).subscribe(() => {
-      this.isFavorited = false;
+    this.favoriteService.removeFavorite(this.document.id).subscribe({
+      next: () => {
+        this.isFavorited = false;
+        this.toastr.success('Document removed from favorites', 'Success');
+      },
+      error: (err) => {
+        console.error('Failed to remove favorite:', err);
+        this.toastr.error('Failed to remove document from favorites', 'Error');
+      }
     });
   } else {
-    this.favoriteService.addFavorite(this.document.id).subscribe(() => {
-      this.isFavorited = true;
+    this.favoriteService.addFavorite(this.document.id).subscribe({
+      next: () => {
+        this.isFavorited = true;
+        this.toastr.success('Document added to favorites', 'Success');
+      },
+      error: (err) => {
+        console.error('Failed to add favorite:', err);
+        this.toastr.error('Failed to add document to favorites', 'Error');
+      }
     });
   }
 }
