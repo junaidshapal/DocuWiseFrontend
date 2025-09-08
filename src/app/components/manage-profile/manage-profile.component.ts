@@ -10,9 +10,12 @@ import { UserService } from '../../Services/user.service';
 export class ManageProfileComponent implements OnInit {
   profileForm!: FormGroup;
   passwordForm!: FormGroup;
-  selectedImage: File | null = null;
-  lastLogin: Date | null = null;
+  selectedFile: File | null = null;
   imagePreview: string | null = null;
+  lastLogin: Date | null = null;
+  showCurrentPassword = false;
+  showNewPassword = false;
+  showConfirmPassword = false;
 
   constructor(
     private fb: FormBuilder,
@@ -65,6 +68,14 @@ export class ManageProfileComponent implements OnInit {
 
   onPasswordChange() {
     if (this.passwordForm.valid) {
+      const formValue = this.passwordForm.value;
+      
+      // Check if passwords match
+      if (formValue.newPassword !== formValue.confirmPassword) {
+        this.toastr.error('New password and confirm password must match', 'Validation Error');
+        return;
+      }
+      
       this.userService.changePassword(this.passwordForm.value).subscribe({
         next: (res) => {
           this.toastr.success(res);
@@ -75,25 +86,39 @@ export class ManageProfileComponent implements OnInit {
           console.error(err);
         },
       });
+    } else {
+      this.toastr.error('Please fill in all required fields correctly', 'Validation Error');
     }
   }
 
-  onFileChange(event: any) {
-    this.selectedImage = event.target.files[0];
+  toggleCurrentPasswordVisibility() {
+    this.showCurrentPassword = !this.showCurrentPassword;
+  }
 
-    if (this.selectedImage) {
+  toggleNewPasswordVisibility() {
+    this.showNewPassword = !this.showNewPassword;
+  }
+
+  toggleConfirmPasswordVisibility() {
+    this.showConfirmPassword = !this.showConfirmPassword;
+  }
+
+  onFileChange(event: any) {
+    this.selectedFile = event.target.files[0];
+
+    if (this.selectedFile) {
       const reader = new FileReader();
       reader.onload = () => {
         this.imagePreview = reader.result as string;
       };
-      reader.readAsDataURL(this.selectedImage);
+      reader.readAsDataURL(this.selectedFile);
     }
   }
 
   uploadProfilePicture() {
-    if (this.selectedImage) {
+    if (this.selectedFile) {
       const formData = new FormData();
-      formData.append('ProfileImage', this.selectedImage);
+      formData.append('ProfileImage', this.selectedFile);
 
       this.userService.uploadProfilePicture(formData).subscribe(() => {
         this.toastr.success('Profile picture updated!');

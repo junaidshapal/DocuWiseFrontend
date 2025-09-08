@@ -1,0 +1,24 @@
+/* Animation for toast slide in/out */
+@keyframes slideInOut {
+  0% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.toast-enter {
+  animation: slideInOut 0.3s ease-out;
+}
+
+.toast-leave {
+  animation: slideInOut 0.3s ease-out reverse;
+}
+
+/* Ensure toasts are above everything */
+.toast-container {
+  z-index: 9999;
+}
