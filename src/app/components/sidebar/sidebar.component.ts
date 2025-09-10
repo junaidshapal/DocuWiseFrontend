@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
@@ -7,12 +7,25 @@ import { Router } from '@angular/router';
   styleUrls: ['./sidebar.component.css']
 })
 export class SidebarComponent {
+  @Input() isCollapsed = false;
+  @Output() toggleCollapse = new EventEmitter<void>();
   isSidebarOpen = false;
 
-  constructor(private router: Router) {}
+  menuItems = [
+    { path: '/documents', label: 'Documents', icon: 'file-text' },
+    { path: '/upload', label: 'Upload', icon: 'upload' },
+    { path: '/favorites', label: 'Favorites', icon: 'star' },
+    { path: '/manage', label: 'Manage Profile', icon: 'settings' }
+  ];
+
+  constructor(public router: Router) {}
 
   toggleSidebar() {
     this.isSidebarOpen = !this.isSidebarOpen;
+  }
+
+  onToggleCollapse() {
+    this.toggleCollapse.emit();
   }
 
   navigate(path: string) {
