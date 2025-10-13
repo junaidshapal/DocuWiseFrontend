@@ -37,16 +37,5 @@ export class AuthService {
     try { return localStorage.getItem(this.TOKEN_KEY); } catch { return null; }
   }
 
-  clearToken(): void {
-    if (!this.isBrowser) return;
-    try { localStorage.removeItem(this.TOKEN_KEY); } catch {}
-  }
-
-  isLoggedIn(): boolean { return !!this.getToken(); }
-  isAuthenticated(): boolean { return !!this.getToken(); }
-
-  logout(): void {
-    this.clearToken();
-    this.router.navigate(['/login']);
-  }
+  
 }
