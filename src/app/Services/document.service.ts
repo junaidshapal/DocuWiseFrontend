@@ -1,8 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, throwError } from 'rxjs';
+import { Observable, throwError, finalize } from 'rxjs';
 import { Document } from '../core/Models/document.model';
 import { AuthService } from '../core/auth.service';
+import { LoadingStateService } from './loading-state.service';
 
 @Injectable({
   providedIn: 'root',
@@ -10,14 +11,13 @@ import { AuthService } from '../core/auth.service';
 export class DocumentService {
   private apiUrl = 'https://localhost:7187/api/Document';
 
-  constructor(private http: HttpClient, private authService: AuthService) {}
-
-  // uploadDocument(file: File, title: string): Observable<any> {
-  //   const formData = new FormData();
-  //   formData.append('file', file);
-  //   formData.append('title', title);
-  //   return this.http.post(`${this.apiUrl}/upload`, formData);
-  // }
+  constructor(
+    private http: HttpClient, 
+    private authService: AuthService,
+    private loadingStateService: LoadingStateService
+  ) {
+    console.log('DocumentService initialized');
+  }
 
 //   uploadDocument(title: string, file?: File, text?: string): Observable<any> {
 //   const formData = new FormData();
@@ -40,21 +40,40 @@ export class DocumentService {
 // }
 
 uploadDocument(title: string, file?: File, text?: string): Observable<any> {
+  console.log('Starting document upload process', { title, hasFile: !!file, hasText: !!text });
+  this.loadingStateService.setLoading(true);
+
   if (file) {
+    console.log('Uploading file document:', { fileName: file.name, fileSize: file.size });
     const formData = new FormData();
     formData.append('title', title);
     formData.append('file', file);
-    return this.http.post(`${this.apiUrl}/upload`, formData);
+    return this.http.post(`${this.apiUrl}/upload`, formData)
+      .pipe(
+        finalize(() => {
+          console.log('File upload process completed');
+          this.loadingStateService.setLoading(false);
+        })
+      );
   }
 
   if (text) {
+    console.log('Uploading text document', { textLength: text.length });
     const payload = {
       title: title,
       text: text
     };
-    return this.http.post(`${this.apiUrl}/text`, payload); // Angular sends as application/json
+    return this.http.post(`${this.apiUrl}/text`, payload)
+      .pipe(
+        finalize(() => {
+          console.log('Text upload process completed');
+          this.loadingStateService.setLoading(false);
+        })
+      );
   }
 
+  console.error('Upload failed: No file or text provided');
+  this.loadingStateService.setLoading(false);
   return throwError(() => new Error('No file or text provided.'));
 }
 
