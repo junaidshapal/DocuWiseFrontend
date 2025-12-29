@@ -88,57 +88,7 @@ export class DocumentListComponent implements OnInit {
     });
   }
 
-  private checkFavoritesIndividually(): void {
-    console.log('[DocumentList] checkFavoritesIndividually -> checking', this.documents.length, 'docs');
-    let remaining = this.documents.length;
-    if (remaining === 0) {
-      this.loadingFavorites = false;
-      return;
-    }
-
-    this.documents.forEach((doc) => {
-      const idStr = String(doc.id);
-      const idNum = parseInt(idStr, 10);
-      const apiId: any = Number.isNaN(idNum) ? idStr : idNum;
-
-      this.favoriteService.isFavorite(apiId).subscribe({
-        next: (isFav) => {
-          console.log(`[DocumentList] isFavorite(${idStr}) ->`, isFav);
-          if (isFav) this.favoriteIds.add(idStr);
-        },
-        error: (err) => {
-          console.error(`[DocumentList] isFavorite(${idStr}) error ->`, err);
-        },
-        complete: () => {
-          remaining--;
-          if (remaining === 0) {
-            this.loadingFavorites = false;
-            console.log('[DocumentList] checkFavoritesIndividually -> done');
-          }
-        },
-      });
-    });
-  }
-
-  onSearchChange(): void {
-    const query = this.searchTerm.trim().toLowerCase();
-    console.log('[DocumentList] onSearchChange ->', query);
-    this.filteredDocuments = this.documents.filter(
-      (doc) =>
-        doc.title?.toLowerCase().includes(query) ||
-        (doc.category && doc.category.toLowerCase().includes(query))
-    );
-  }
-
-  deleteDocument(id: string): void {
-    console.log('[DocumentList] deleteDocument ->', id);
-    this.documentService.deleteDocument(id).subscribe({
-      next: () => {
-        console.log('[DocumentList] deleteDocument -> success, refreshing list');
-        this.favoriteIds.delete(String(id)); // keep local favorites in sync
-        this.toastr.success('Document deleted successfully', 'Success');
-        this.getDocuments();
-      },
+  
       error: (err) => {
         console.error('[DocumentList] deleteDocument -> error', err);
         this.toastr.error('Failed to delete document', 'Error');
