@@ -46,6 +46,13 @@ export class ManageProfileComponent implements OnInit {
 
       console.log('Profile loaded:', res);
 
+      if (res.profilePictureUrl) {
+        this.imagePreview = `https://localhost:7187${res.profilePictureUrl}`;
+        console.log('Loaded image URL:', this.imagePreview);
+      } else {
+        console.warn('No profile image URL in profile data');
+      }
+    },
     error: (err) => {
       console.error('Failed to load profile:', err);
     }
