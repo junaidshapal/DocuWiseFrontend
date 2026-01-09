@@ -14,9 +14,7 @@ getProfile() {
   return this.http.get<UserProfile>(`${this.baseUrl}`);
 }
 
-updateProfile(data: any) {
-  return this.http.put(`${this.baseUrl}/update`, data);
-}
+
 
 changePassword(data: any) {
   return this.http.put(`${this.baseUrl}/change-password`, data, { responseType: 'text' });

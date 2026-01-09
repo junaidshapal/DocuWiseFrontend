@@ -58,14 +58,7 @@ export class ManageProfileComponent implements OnInit {
     }
   });
 }
-  onProfileUpdate() {
-    if (this.profileForm.valid) {
-      this.userService.updateProfile(this.profileForm.value).subscribe(() => {
-        this.toastr.success('Profile updated!');
-      });
-    }
-  }
-
+  
   onPasswordChange() {
     if (this.passwordForm.valid) {
       const formValue = this.passwordForm.value;
