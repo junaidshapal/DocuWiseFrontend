@@ -115,14 +115,5 @@ export class ManageProfileComponent implements OnInit {
     }
   }
 
-  uploadProfilePicture() {
-    if (this.selectedFile) {
-      const formData = new FormData();
-      formData.append('ProfileImage', this.selectedFile);
-
-      this.userService.uploadProfilePicture(formData).subscribe(() => {
-        this.toastr.success('Profile picture updated!');
-      });
-    }
-  }
+  
 }
