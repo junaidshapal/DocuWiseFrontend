@@ -12,14 +12,7 @@ export class AppComponent {
   isAuthRoute = false;
   private authRoutes = ['/login', '/register', '/forgot-password', '/reset-password'];
 
-  constructor(private router: Router) {
-    this.router.events.pipe(filter(e => e instanceof NavigationEnd))
-      .subscribe(() => {
-        const url = this.router.url;
-        this.isAuthRoute = this.authRoutes.some(p => url.startsWith(p));
-      });
-  }
-
+  
   onToggleSidebar() {
     this.isSidebarCollapsed = !this.isSidebarCollapsed;
   }
